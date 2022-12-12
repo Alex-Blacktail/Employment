@@ -1,48 +1,56 @@
-﻿@model IEnumerable<Employment.Data.Company>
+﻿@model IEnumerable<Employment.Models.CompanyDto>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Компании</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Добавить</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Company.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ShortName)
+                @Html.DisplayNameFor(model => model.Company.ShortName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Company.Email)
+            </th>
+            <th>
+                <div>Номера телефонов</div>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Редактировать</a> 
-                     
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.ShortName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Email)
+                </td>
+                <td>
+                    @item.GetPhoneNumbers()
+                </td>
+                <td>
+                    <a asp-action="Index" asp-controller="Addresses" asp-route-id="@item.Company.Id" class="btn btn-secondary">Адресы</a>
+                    <a asp-action="Index" asp-controller="Posts" asp-route-id="@item.Company.Id" class="btn btn-success">Должности</a>
+                    <a asp-action="Edit" asp-route-id="@item.Company.Id" class="btn btn-primary">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@item.Company.Id" class="btn btn-danger">Удалить</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

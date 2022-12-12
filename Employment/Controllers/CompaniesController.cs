@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Employment.Data;
+using Employment.Models;
+using System.Text;
 
 namespace Employment.Controllers
 {
@@ -20,8 +22,57 @@ namespace Employment.Controllers
 
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Companies.ToListAsync());
+            var list = new List<CompanyDto>();
+
+            var companies = await _context.Companies
+                .Include(e => e.PhoneNumbers)
+                .AsNoTracking()
+                .ToListAsync();
+
+            foreach(var item in companies)
+            {
+                list.Add(new CompanyDto
+                {
+                    Company = item
+                });
+            }
+
+            return View(list);
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var list = new List<CompanyDto>();
+
+        //    var companies = await _context.Companies
+        //        .Include(e => e.PhoneNumbers)
+        //        .Include(e => e.Addresses)
+        //        .AsNoTracking()
+        //        .ToListAsync();
+
+        //    foreach (var item in companies)
+        //    {
+        //        string addresses = null;
+        //        var fullAddresses = _context.FullAddresses.Where(x => x.CompanyId == item.Id);
+
+        //        if (fullAddresses.Count() > 0)
+        //        {
+        //            var sb = new StringBuilder(16);
+        //            foreach (var addr in fullAddresses)
+        //                sb.Append(addr.ToString()).Append("\n");
+
+        //            addresses = sb.ToString();
+        //        }
+
+        //        list.Add(new CompanyDto
+        //        {
+        //            Company = item,
+        //            FullAddress = addresses != null ? addresses : null
+        //        });
+        //    }
+
+        //    return View(list);
+        //}
 
         public async Task<IActionResult> Details(int? id)
         {

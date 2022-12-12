@@ -13,21 +13,21 @@ namespace Employment.Data
         {
         }
 
-        public virtual DbSet<Address> Addresses { get; set; } = null!;
-        public virtual DbSet<Company> Companies { get; set; } = null!;
-        public virtual DbSet<FullAddress> FullAddresses { get; set; } = null!;
+        public virtual DbSet<Post> Posts { get; set; } = null!;
+        public virtual DbSet<Skill> Skills { get; set; } = null!;
         public virtual DbSet<Gender> Genders { get; set; } = null!;
+        public virtual DbSet<Salary> Salaries { get; set; } = null!;
+        public virtual DbSet<Company> Companies { get; set; } = null!;
+        public virtual DbSet<Requirment> Requirments { get; set; } = null!;
         public virtual DbSet<Locality> Localities { get; set; } = null!;
         public virtual DbSet<LocalityType> LocalityTypes { get; set; } = null!;
-        public virtual DbSet<PhoneNumber> PhoneNumbers { get; set; } = null!;
-        public virtual DbSet<Post> Posts { get; set; } = null!;
-        public virtual DbSet<Requirment> Requirments { get; set; } = null!;
-        public virtual DbSet<Responsibility> Responsibilities { get; set; } = null!;
-        public virtual DbSet<Salary> Salaries { get; set; } = null!;
-        public virtual DbSet<Skill> Skills { get; set; } = null!;
-        public virtual DbSet<SocialResponsibility> SocialResponsibilities { get; set; } = null!;
         public virtual DbSet<Street> Streets { get; set; } = null!;
         public virtual DbSet<StreetType> StreetTypes { get; set; } = null!;
+        public virtual DbSet<Address> Addresses { get; set; } = null!;
+        public virtual DbSet<FullAddress> FullAddresses { get; set; } = null!;
+        public virtual DbSet<PhoneNumber> PhoneNumbers { get; set; } = null!;
+        public virtual DbSet<Responsibility> Responsibilities { get; set; } = null!;
+        public virtual DbSet<SocialResponsibility> SocialResponsibilities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
