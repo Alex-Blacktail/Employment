@@ -8,46 +8,49 @@ using Microsoft.EntityFrameworkCore;
 
 using Employment.Data;
 using Employment.Models;
+using System.Text;
 
 namespace Employment.Controllers
 {
-    public class Addresses2Controller : Controller
+    public class CompAddressesController : Controller
     {
         private readonly EmploymentContext _context;
 
-        public Addresses2Controller(EmploymentContext context)
+        public CompAddressesController(EmploymentContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var addresses = await _context.FullAddresses.ToListAsync();
-            return View(addresses);
-        }
+            var list = new List<CompanyAddressDto>();
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var companies = await _context.Companies
+                .Include(e => e.PhoneNumbers)
+                .Include(e => e.Addresses)
+                .AsNoTracking()
+                .ToListAsync();
+
+            foreach (var item in companies)
             {
-                return NotFound();
+                var fullAddresses = await _context.FullAddresses
+                    .Where(x => x.CompanyId == item.Id)
+                    .ToListAsync();
+
+                list.Add(new CompanyAddressDto
+                {
+                    CompanyName = item.Name,
+                    FullAddresses = fullAddresses
+                });
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Street)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (address == null)
-            {
-                return NotFound();
-            }
-
-            return View(address);
+            return View(list);
         }
 
         public async Task<IActionResult> Create()
         {
             var localities = await GetLocalitiesDto();
+            var companies = await _context.Companies.ToListAsync();
 
             ViewData["LocalityId"] = new SelectList(
                 localities.Select(x => new
@@ -57,48 +60,38 @@ namespace Employment.Controllers
                 }), "Id", "Name");
 
             ViewData["StreetId"] = new SelectList(_context.Streets.Where(s => s.LocalityId == localities[0].Id), "Id", "Name");
+
+            ViewData["CompanyId"] = new SelectList(
+                companies.Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }), "Id", "Name");
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Address address)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(address);
-                await _context.SaveChangesAsync();
+            await _context.AddAsync(address);
+            await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-            var localities = await GetLocalitiesDto();
-
-            ViewData["LocalityId"] = new SelectList(
-                localities.Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.FullName
-                }), "Id", "Name");
-
-            ViewData["StreetId"] = new SelectList(_context.Streets.Where(s => s.LocalityId == localities[0].Id), "Id", "Name");
-
-            return View(address);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return NotFound();           
 
             var address = await _context.Addresses.Include(a => a.Street).FirstOrDefaultAsync(a => a.Id == id);
             if (address == null)
-            {
                 return NotFound();
-            }
 
             var localities = await GetLocalitiesDto();
+            var companies = await _context.Companies.ToListAsync();
 
             ViewData["LocalityId"] = new SelectList(
                 localities.Select(x => new
@@ -113,6 +106,14 @@ namespace Employment.Controllers
                 "Id",
                 "Name",
                 address.StreetId);
+
+            ViewData["CompanyId"] = new SelectList(
+                companies.Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }), "Id", "Name", address.Id);
+
             return View(address);
         }
 
@@ -120,49 +121,39 @@ namespace Employment.Controllers
         public async Task<IActionResult> Edit(int id, Address address)
         {
             if (id != address.Id)
-            {
                 return NotFound();
+
+            try
+            {
+                _context.Update(address);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressExists(address.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(address);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AddressExists(address.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Name", address.StreetId);
-            return View(address);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var address = await _context.Addresses
                 .Include(a => a.Street)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (address == null)
-            {
                 return NotFound();
-            }
 
             return View(address);
         }

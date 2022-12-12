@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Employment.Models.CompanyAddressDto>
+
+@{
+    ViewData["Title"] = "Адреса";
+}
+
+<h1>Адресная книга</h1>
+
+<p>
+    <a asp-action="Create">Добавить адрес</a>
+</p>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Компания: @item.CompanyName
+                </div>
+
+                @foreach (var a in item.FullAddresses)
+                {
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">@a.ToString();</li>
+                    </ul>
+                    <div class="card-body">
+                        <a asp-action="Edit" asp-route-id="@a.Id" class="btn btn-danger">Редактировать</a>
+                        <a asp-action="Delete" asp-controller="CompAddresses" asp-route-id="@a.Id" class="btn btn-primary">Удалить</a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

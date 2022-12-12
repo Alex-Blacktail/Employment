@@ -1,26 +1,33 @@
-﻿@*@model Employment.Data.Address
+﻿@model Employment.Data.Address
 
 @{
-    ViewData["Title"] = "Добавить адрес";
+    ViewData["Title"] = "Редактировать адрес";
 }
 
-<h1>Добавить</h1>
+<h1>Редактировать</h1>
 
 <h4>Адрес</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
 
-             <div class="form-group">
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId" id="companyId"></select>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label">Населенный пункт</label>
                 <select class ="form-control" asp-items="ViewBag.LocalityId" id="localityId"></select>
             </div>
 
             <div class="form-group">
                 <label asp-for="StreetId" class="control-label"></label>
-                <select asp-for="StreetId" class ="form-control" asp-items="ViewBag.StreetId" id="streetId"></select>
+                <select asp-for="StreetId" class="form-control" asp-items="ViewBag.StreetId" id="streetId"></select>
+                <span asp-validation-for="StreetId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HouseNumber" class="control-label"></label>
@@ -28,28 +35,25 @@
                 <span asp-validation-for="HouseNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EntranceNumber" class="control-label"></label>
-                <input asp-for="EntranceNumber" class="form-control" />
-                <span asp-validation-for="EntranceNumber" class="text-danger"></span>
+                <label asp-for="CorpusNumber" class="control-label"></label>
+                <input asp-for="CorpusNumber" class="form-control" />
+                <span asp-validation-for="CorpusNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FloorNumber" class="control-label"></label>
-                <input asp-for="FloorNumber" class="form-control" />
-                <span asp-validation-for="FloorNumber" class="text-danger"></span>
+                <label asp-for="FlatNumber" class="control-label"></label>
+                <input asp-for="FlatNumber" class="form-control" />
+                <span asp-validation-for="FlatNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Добавить" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" style="margin-top:5px" />
             </div>
         </form>
     </div>
-
-
 </div>
 
 <div>
     <a asp-action="Index">Вернуться</a>
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -70,4 +74,3 @@
     })
 </script>
 }
-*@
