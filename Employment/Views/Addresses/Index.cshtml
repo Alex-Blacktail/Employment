@@ -1,37 +1,32 @@
-﻿@model IEnumerable<GoodsDemand.Domain.FullAddress>
+﻿@model IEnumerable<Employment.Data.Address>
 
 @{
-    ViewData["Title"] = "Адреса";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Адресная книга</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Добавить адрес</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LocalityType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LocalityName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StreetType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StreetName)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.HouseNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EntranceNumber)
+                @Html.DisplayNameFor(model => model.CorpusNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FloorNumber)
+                @Html.DisplayNameFor(model => model.FlatNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Street)
             </th>
             <th></th>
         </tr>
@@ -40,30 +35,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.LocalityType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocalityName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StreetType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StreetName)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.HouseNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EntranceNumber)
+                @Html.DisplayFor(modelItem => item.CorpusNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FloorNumber)
+                @Html.DisplayFor(modelItem => item.FlatNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary" style="margin-bottom:4px">Редактировать</a> 
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-dark">Подробно</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
+                @Html.DisplayFor(modelItem => item.Company.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Street.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

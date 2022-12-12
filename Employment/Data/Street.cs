@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Employment.Data
 {
@@ -11,8 +12,14 @@ namespace Employment.Data
         }
 
         public int Id { get; set; }
+
+        [DisplayName("Наименование")]
         public string Name { get; set; } = null!;
+
+        [DisplayName("Тип улицы")]
         public int StreetTypeId { get; set; }
+
+        [DisplayName("Населенный пункт")]
         public int LocalityId { get; set; }
 
         public virtual Locality Locality { get; set; } = null!;

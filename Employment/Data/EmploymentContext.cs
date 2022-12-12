@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Employment.Data
 {
@@ -31,14 +28,6 @@ namespace Employment.Data
         public virtual DbSet<SocialResponsibility> SocialResponsibilities { get; set; } = null!;
         public virtual DbSet<Street> Streets { get; set; } = null!;
         public virtual DbSet<StreetType> StreetTypes { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Employment;Trusted_Connection=True;Integrated Security=true;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

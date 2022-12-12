@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Employment.Data
 {
@@ -15,10 +16,20 @@ namespace Employment.Data
         }
 
         public int Id { get; set; }
+
+        [DisplayName("Наименование")]
         public string Name { get; set; } = null!;
+
+        [DisplayName("Кртакое наименование")]
         public string? ShortName { get; set; }
+
+        [DisplayName("Дата открытия вакансии")]
         public DateTime BeginDate { get; set; }
+
+        [DisplayName("Дата закрытия вакансии")]
         public DateTime? EndDate { get; set; }
+
+        [DisplayName("Компания")]
         public int CompanyId { get; set; }
 
         public virtual Company Company { get; set; } = null!;

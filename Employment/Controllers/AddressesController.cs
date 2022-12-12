@@ -1,13 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
 using Employment.Data;
-using System.Collections.Generic;
-using Employment.Models;
 
 namespace Employment.Controllers
 {
@@ -22,46 +20,37 @@ namespace Employment.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var addresses = await _context.FullAddresses.ToListAsync();
-            return View(addresses);
+            var employmentContext = _context.Addresses.Include(a => a.Company).Include(a => a.Street);
+            return View(await employmentContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
+            if (id == null || _context.Addresses == null)
                 return NotFound();
-            }
+            
 
             var address = await _context.Addresses
+                .Include(a => a.Company)
                 .Include(a => a.Street)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (address == null)
-            {
                 return NotFound();
-            }
-
+            
             return View(address);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var localities = await GetLocalitiesDto();
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
+            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Id");
 
-            ViewData["LocalityId"] = new SelectList(
-                localities.Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.FullName
-                }), "Id", "Name");
-
-            ViewData["StreetId"] = new SelectList(_context.Streets.Where(s => s.LocalityId == localities[0].Id), "Id", "Name");
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,StreetId,HouseNumber,EntranceNumber,FloorNumber")] Address address)
+        public async Task<IActionResult> Create([Bind("Id,StreetId,HouseNumber,CorpusNumber,FlatNumber,CompanyId")] Address address)
         {
             if (ModelState.IsValid)
             {
@@ -69,59 +58,36 @@ namespace Employment.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            var localities = await GetLocalitiesDto();
 
-            ViewData["LocalityId"] = new SelectList(
-                localities.Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.FullName
-                }), "Id", "Name");
-
-            ViewData["StreetId"] = new SelectList(_context.Streets.Where(s => s.LocalityId == localities[0].Id), "Id", "Name");
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", address.CompanyId);
+            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Id", address.StreetId);
 
             return View(address);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
+            if (id == null || _context.Addresses == null)
                 return NotFound();
-            }
+            
+            var address = await _context.Addresses.FindAsync(id);
 
-            var address = await _context.Addresses.Include(a => a.Street).FirstOrDefaultAsync(a => a.Id == id);
             if (address == null)
-            {
                 return NotFound();
-            }
+            
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", address.CompanyId);
+            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Id", address.StreetId);
 
-            var localities = await GetLocalitiesDto();
-
-            ViewData["LocalityId"] = new SelectList(
-                localities.Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.FullName
-                }), "Id", "Name");
-
-
-            ViewData["StreetId"] = new SelectList(
-                _context.Streets.Where(s => s.LocalityId == address.Street.LocalityId),
-                "Id",
-                "Name",
-                address.StreetId);
             return View(address);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StreetId,HouseNumber,EntranceNumber,FloorNumber")] Address address)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StreetId,HouseNumber,CorpusNumber,FlatNumber,CompanyId")] Address address)
         {
             if (id != address.Id)
-            {
                 return NotFound();
-            }
+            
 
             if (ModelState.IsValid)
             {
@@ -143,18 +109,22 @@ namespace Employment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Name", address.StreetId);
+
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", address.CompanyId);
+            ViewData["StreetId"] = new SelectList(_context.Streets, "Id", "Id", address.StreetId);
+
             return View(address);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Addresses == null)
             {
                 return NotFound();
             }
 
             var address = await _context.Addresses
+                .Include(a => a.Company)
                 .Include(a => a.Street)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (address == null)
@@ -168,8 +138,14 @@ namespace Employment.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (_context.Addresses == null)
+                return Problem("Передаваемый параметр равен null!");
+            
             var address = await _context.Addresses.FindAsync(id);
-            _context.Addresses.Remove(address);
+
+            if (address != null)
+                _context.Addresses.Remove(address);
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -177,30 +153,6 @@ namespace Employment.Controllers
         private bool AddressExists(int id)
         {
             return _context.Addresses.Any(e => e.Id == id);
-        }
-
-        public IActionResult GetStreetsByLocality(int id)
-        {
-            ViewData["StreetId"] = new SelectList(_context.Streets.Where(s => s.LocalityId == id), "Id", "Name");
-            return PartialView();
-        }
-
-        private async Task<List<LocalityDto>> GetLocalitiesDto()
-        {
-            var localities = await _context.Localities
-                .Include(x => x.LocalityType)
-                .ToListAsync();
-
-            var localityList = new List<LocalityDto>();
-
-            foreach (var locality in localities)
-                localityList.Add(new LocalityDto
-                {
-                    Id = locality.Id,
-                    FullName = $"{locality.LocalityType.ShortName}. {locality.Name}"
-                });
-
-            return localityList;
         }
     }
 }
