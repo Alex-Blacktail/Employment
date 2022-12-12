@@ -1,13 +1,13 @@
 ﻿@model Employment.Data.PhoneNumber
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<h1>Удалить</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h1>Вы уверены, что хотите удалить данную запись?</h1>
 <div>
     <h4>PhoneNumber</h4>
     <hr />
@@ -29,6 +29,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Вернуться</a>
     </form>
 </div>
