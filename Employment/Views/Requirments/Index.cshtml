@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Требования</h1>
 
 <p>
     <a asp-action="Create">Добавить</a>
@@ -44,15 +44,15 @@
                 @Html.DisplayFor(modelItem => item.CommunicationSkill)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gender.Id)
+                @Html.DisplayFor(modelItem => item.Gender.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Post.Id)
+                @Html.DisplayFor(modelItem => item.Post.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Редактировать</a> 
-                 
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
+            </td>
         </tr>
 }
     </tbody>

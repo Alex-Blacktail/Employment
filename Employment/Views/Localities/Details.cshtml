@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Детали</h1>
 
 <div>
-    <h4>Locality</h4>
+    <h4>Населенный пункт</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.LocalityType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LocalityType.Id)
+            @Html.DisplayFor(model => model.LocalityType.Name)
         </dd>
     </dl>
 </div>

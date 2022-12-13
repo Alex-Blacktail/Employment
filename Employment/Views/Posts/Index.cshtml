@@ -47,12 +47,11 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Company.Id)
+                @Html.DisplayFor(modelItem => item.Company.Name)
             </td>
             <td>
-                   <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Редактировать</a> 
-                     
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
+                   <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Редактировать</a>           
+                   <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Удалить</a>
             </td>
         </tr>
 }
