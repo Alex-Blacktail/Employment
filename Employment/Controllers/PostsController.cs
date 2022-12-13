@@ -50,6 +50,8 @@ namespace Employment.Controllers
             
             var post = await _context.Posts
                 .Include(x => x.Company)
+                .Include(x => x.Responsibilities)
+                .Include(x => x.Skills)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (post == null)

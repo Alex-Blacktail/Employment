@@ -18,47 +18,21 @@ namespace Employment.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Create(int id)
         {
-            var employmentContext = _context.Skills.Include(s => s.Post);
-            return View(await employmentContext.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Skills == null)
-                return NotFound();
-            
-            var skill = await _context.Skills
-                .Include(s => s.Post)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (skill == null)
-            {
-                return NotFound();
-            }
-
+            var skill = new Skill { PostId = id };
             return View(skill);
-        }
-
-        public IActionResult Create()
-        {
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id");
-            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,Name,Level,PostId")] Skill skill)
+        public async Task<IActionResult> Create(Skill skill)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(skill);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            skill.Id = 0;
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", skill.PostId);
-            return View(skill);
+            _context.Add(skill);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Posts", new { Id = skill.PostId });
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -71,40 +45,33 @@ namespace Employment.Controllers
             if (skill == null)
                 return NotFound();
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", skill.PostId);
             return View(skill);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Level,PostId")] Skill skill)
+        public async Task<IActionResult> Edit(int id, Skill skill)
         {
             if (id != skill.Id)
                 return NotFound();
-            
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                _context.Update(skill);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SkillExists(skill.Id))
                 {
-                    _context.Update(skill);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!SkillExists(skill.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", skill.PostId);
-            return View(skill);
+            return RedirectToAction("Details", "Posts", new { Id = skill.PostId });
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -130,11 +97,12 @@ namespace Employment.Controllers
             
             var skill = await _context.Skills.FindAsync(id);
 
-            if (skill != null)
-                _context.Skills.Remove(skill);
+            var postId = skill.PostId;
+            _context.Skills.Remove(skill);
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Details", "Posts", new { Id = postId });
         }
 
         private bool SkillExists(int id)

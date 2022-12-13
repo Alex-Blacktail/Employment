@@ -9,7 +9,7 @@
 
 <h1>Вы уверены, что хотите удалить данную запись?</h1>
 <div>
-    <h4>Responsibility</h4>
+    <h4>Обязанность</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -19,16 +19,16 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Post)
+            Должность
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.Id)
+            @Html.DisplayFor(model => model.Post.Name)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Удалить" class="btn btn-danger" /> |
-        <a asp-action="Index">Вернуться</a>
+        <a asp-action="Details" asp-controller="Posts" asp-route-id="@Model.Post.Id">Вернуться</a>
     </form>
 </div>

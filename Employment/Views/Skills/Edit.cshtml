@@ -13,7 +13,10 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="PostId" />
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -25,11 +28,6 @@
                 <span asp-validation-for="Level" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostId" class="control-label"></label>
-                <select asp-for="PostId" class="form-control" asp-items="ViewBag.PostId"></select>
-                <span asp-validation-for="PostId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" style="margin-top:5px" />
             </div>
         </form>
@@ -37,7 +35,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Вернуться</a>
+     <a asp-action="Details" asp-controller="Posts" asp-route-id="@Model.PostId">Вернуться</a>
 </div>
 
 @section Scripts {

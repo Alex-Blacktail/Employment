@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Employment.Data;
+using Employment.Models;
 
 namespace Employment.Controllers
 {
@@ -18,47 +19,21 @@ namespace Employment.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Create(int id)
         {
-            var employmentContext = _context.Responsibilities.Include(r => r.Post);
-            return View(await employmentContext.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Responsibilities == null)
-                return NotFound();
-            
-
-            var responsibility = await _context.Responsibilities
-                .Include(r => r.Post)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (responsibility == null)
-                return NotFound();
-            
+            var responsibility = new Responsibility { PostId = id };
             return View(responsibility);
-        }
-
-        public IActionResult Create()
-        {
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id");
-            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,Name,PostId")] Responsibility responsibility)
+        public async Task<IActionResult> Create(Responsibility responsibility)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(responsibility);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            responsibility.Id = 0;
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", responsibility.PostId);
+            _context.Add(responsibility);
+            await _context.SaveChangesAsync();
 
-            return View(responsibility);
+            return RedirectToAction("Details", "Posts", new { Id = responsibility.PostId });
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -71,41 +46,32 @@ namespace Employment.Controllers
             if (responsibility == null)
                 return NotFound();
             
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", responsibility.PostId);
-
             return View(responsibility);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,PostId")] Responsibility responsibility)
+        public async Task<IActionResult> Edit(int id, Responsibility responsibility)
         {
             if (id != responsibility.Id)
                 return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(responsibility);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ResponsibilityExists(responsibility.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(responsibility);
+                await _context.SaveChangesAsync();
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", responsibility.PostId);
-
-            return View(responsibility);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ResponsibilityExists(responsibility.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Details", "Posts", new { Id = responsibility.PostId });
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -132,18 +98,17 @@ namespace Employment.Controllers
             }
 
             var responsibility = await _context.Responsibilities.FindAsync(id);
-            if (responsibility != null)
-            {
-                _context.Responsibilities.Remove(responsibility);
-            }
+            var postId = responsibility.PostId;
+
+            _context.Responsibilities.Remove(responsibility);     
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Posts", new { Id = postId });
         }
 
         private bool ResponsibilityExists(int id)
         {
-          return _context.Responsibilities.Any(e => e.Id == id);
+            return _context.Responsibilities.Any(e => e.Id == id);
         }
     }
 }

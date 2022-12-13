@@ -41,7 +41,7 @@ namespace Employment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", salary.PostId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", salary.PostId);
             return View(salary);
         }
 

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div>
-    <h4>Дожность</h4>
+    <h4>Должность</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -144,23 +144,36 @@
             foreach(var el in Model.Post.Responsibilities)
             {
                 <dt class="col-sm-2">
-                    @(i).
+                    @(i). @el.Name
                 </dt>
                 <dd class="col-sm-10">
-                    @el.Name
+                    <a asp-action="Edit" asp-controller="Responsibilities" asp-route-id="@el.Id">Редактировать</a> |
+                    <a asp-action="Delete" asp-controller="Responsibilities" asp-route-id="@el.Id">Удалить</a>
                 </dd>
-                @(i++)
+                i++;
             }
         }
-        @*<dt class = "col-sm-2">
-        </dt>
-        <dd class = "col-sm-10">
-            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a>
-        </dd>*@
+        <a asp-action="Create" asp-controller="Responsibilities" asp-route-id="@Model.Post.Id">Добавить</a>
+    </dl>
+
+    <h4>Навыки</h4>
+    <hr />
+    <dl class="row">
+        @{
+            int j = 1;
+            foreach (var el in Model.Post.Skills)
+            {
+                <dt class="col-sm-2">
+                    @(j). @el.Name
+                </dt>
+                <dd class="col-sm-10">
+                    <a asp-action="Edit" asp-controller="Skills" asp-route-id="@el.Id">Редактировать</a> |
+                    <a asp-action="Delete" asp-controller="Skills" asp-route-id="@el.Id">Удалить</a>
+                </dd>
+                j++;
+            }
+        }
+        <a asp-action="Create" asp-controller="Skills" asp-route-id="@Model.Post.Id">Добавить</a>
     </dl>
 
 </div>
-@*<div>
-    <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a> |
-    <a asp-action="Index">Вернуться</a>
-</div>*@
