@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Employment.Data;
+using Employment.Models;
 
 namespace Employment.Controllers
 {
@@ -22,21 +23,6 @@ namespace Employment.Controllers
         {
             var employmentContext = _context.Salaries.Include(s => s.Post);
             return View(await employmentContext.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Salaries == null)
-                return NotFound();
-            
-            var salary = await _context.Salaries
-                .Include(s => s.Post)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (salary == null)
-                return NotFound();
-
-            return View(salary);
         }
 
         public IActionResult Create()
@@ -69,70 +55,41 @@ namespace Employment.Controllers
             if (salary == null)
                 return NotFound();
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", salary.PostId);
+            var model = new SalaryDto
+            {
+                Id = salary.Id,
+                PostId = salary.PostId,
+                LowerLimit = salary.LowerLimit.ToString(),
+                UpperLimit = salary.UpperLimit.ToString()
+            };
 
-            return View(salary);
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LowerLimit,UpperLimit,PostId")] Salary salary)
+        public async Task<IActionResult> Edit(int id, SalaryDto salaryDto)
         {
-            if (id != salary.Id)
+            if (id != salaryDto.Id)
                 return NotFound();
-            
-            if (ModelState.IsValid)
+
+            try
             {
-                try
+                var salary = new Salary
                 {
-                    _context.Update(salary);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SalaryExists(salary.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    Id = salaryDto.Id,
+                    PostId = salaryDto.PostId,
+                    LowerLimit = decimal.Parse(salaryDto.LowerLimit),
+                    UpperLimit = decimal.Parse(salaryDto.UpperLimit)
+                };
+
+                _context.Update(salary);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
 
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", salary.PostId);
-            return View(salary);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Salaries == null)
-                return NotFound();
-            
-            var salary = await _context.Salaries
-                .Include(s => s.Post)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (salary == null)
-                return NotFound();           
-
-            return View(salary);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Salaries == null)
-                return Problem("Передаваемый параметр равен null!");
-            
-            var salary = await _context.Salaries.FindAsync(id);
-
-            if (salary != null)
-                _context.Salaries.Remove(salary);      
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction("Details", "Posts", new { Id = salaryDto.PostId });
         }
 
         private bool SalaryExists(int id)

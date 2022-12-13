@@ -41,7 +41,7 @@ namespace Employment.Controllers
 
         public IActionResult Create()
         {
-            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Id");
+            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name");
             return View();
         }
 
@@ -55,7 +55,7 @@ namespace Employment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Id", locality.LocalityTypeId);
+            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
             return View(locality);
         }
 
@@ -69,7 +69,7 @@ namespace Employment.Controllers
                 return NotFound();
             
 
-            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Id", locality.LocalityTypeId);
+            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
             return View(locality);
         }
 
@@ -101,7 +101,7 @@ namespace Employment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Id", locality.LocalityTypeId);
+            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
             return View(locality);
         }
 

@@ -1,49 +1,166 @@
-﻿@model Employment.Data.Post
+﻿@model Employment.Models.PostViewModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Детали</h1>
-
 <div>
     <h4>Дожность</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Post.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Post.Name)
         </dd>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ShortName)
+            @Html.DisplayNameFor(model => model.Post.ShortName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ShortName)
+            @Html.DisplayFor(model => model.Post.ShortName)
         </dd>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BeginDate)
+            @Html.DisplayNameFor(model => model.Post.BeginDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BeginDate)
+            @Html.DisplayFor(model => model.Post.BeginDate)
         </dd>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.Post.EndDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.Post.EndDate)
         </dd>
+
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
+            Компания
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Company.Id)
+            @Html.DisplayFor(model => model.Post.Company.Name)
+        </dd>
+
+        <dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a>
         </dd>
     </dl>
+
+    <h4>Заработная плата</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salary.LowerLimit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salary.LowerLimit)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salary.UpperLimit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salary.UpperLimit)
+        </dd>
+
+        <dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-action="Edit" asp-controller="Salaries" asp-route-id="@Model.Salary.Id">Редактировать</a>
+        </dd>
+    </dl>
+
+    <h4>Требования</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Requirment.LowerAgeLimit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Requirment.LowerAgeLimit)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Requirment.UpperAgeLimit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Requirment.UpperAgeLimit)
+        </dd>
+
+        <dt class="col-sm-2">
+            Пол
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Requirment.Gender.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Requirment.CommunicationSkill)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Requirment.CommunicationSkill)
+        </dd>
+
+        <dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-action="Edit" asp-controller="Requirments" asp-route-id="@Model.Requirment.Id">Редактировать</a>
+        </dd>
+    </dl>
+
+    <h4>Социальные обязательства</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SocialResponsibility.SocialPackage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SocialResponsibility.SocialPackage)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SocialResponsibility.EmploymentBook)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SocialResponsibility.EmploymentBook)
+        </dd>
+
+        <dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-action="Edit" asp-controller="SocialResponsibilities" asp-route-id="@Model.SocialResponsibility.Id">Редактировать</a>
+        </dd>
+    </dl>
+
+    <h4>Обязанности</h4>
+    <hr />
+    <dl class="row">
+        @{
+            int i = 1;
+            foreach(var el in Model.Post.Responsibilities)
+            {
+                <dt class="col-sm-2">
+                    @(i).
+                </dt>
+                <dd class="col-sm-10">
+                    @el.Name
+                </dd>
+                @(i++)
+            }
+        }
+        @*<dt class = "col-sm-2">
+        </dt>
+        <dd class = "col-sm-10">
+            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a>
+        </dd>*@
+    </dl>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+@*<div>
+    <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a> |
     <a asp-action="Index">Вернуться</a>
-</div>
+</div>*@

@@ -1,4 +1,4 @@
-﻿@model Employment.Data.Post
+﻿@model Employment.Models.PostCreateDto
 
 @{
     ViewData["Title"] = "Добавление";
@@ -13,32 +13,89 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <h5>Должность</h5>
+
             <div class="form-group">
                 <label asp-for="CompanyId" class="control-label"></label>
                 <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
             </div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="ShortName" class="control-label"></label>
                 <input asp-for="ShortName" class="form-control" />
                 <span asp-validation-for="ShortName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="BeginDate" class="control-label"></label>
-                <input asp-for="BeginDate" class="form-control" />
+                <input asp-for="BeginDate" class="form-control" type="date" />
                 <span asp-validation-for="BeginDate" class="text-danger"></span>
             </div>
+
+            <hr/>
+            <h5>Зарплата</h5>
+
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="LowerLimit" class="control-label"></label>
+                <input asp-for="LowerLimit" class="form-control" />
+                <span asp-validation-for="LowerLimit" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Добавить" class="btn btn-primary" />
+                <label asp-for="UpperLimit" class="control-label"></label>
+                <input asp-for="UpperLimit" class="form-control" />
+                <span asp-validation-for="UpperLimit" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <h5>Социальные обязательства компании</h5>
+
+            <div class="form-group">
+                <label asp-for="SocialPackage" class="control-label"></label>
+                <input asp-for="SocialPackage" class="form-control" />
+                <span asp-validation-for="SocialPackage" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EmploymentBook" class="control-label"></label>
+                <input asp-for="EmploymentBook" class="form-control" />
+                <span asp-validation-for="EmploymentBook" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <h5>Требования</h5>
+
+            <div class="form-group">
+                <label asp-for="LowerAgeLimit" class="control- label"></label>
+                <input asp-for="LowerAgeLimit" class="form-control" />
+                <span asp-validation-for="LowerAgeLimit" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UpperAgeLimit" class="control-label"></label>
+                <input asp-for="UpperAgeLimit" class="form-control" />
+                <span asp-validation-for="UpperAgeLimit" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CommunicationSkill" class="control-label"></label>
+                <select asp-for="CommunicationSkill" class="form-control" asp-items="ViewBag.CommunicationSkill"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GenderId" class="control-label"></label>
+                <select asp-for="GenderId" class="form-control" asp-items="ViewBag.GenderId"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" style="margin-top:5px"/>
             </div>
         </form>
     </div>

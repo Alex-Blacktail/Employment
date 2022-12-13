@@ -7,7 +7,7 @@
 
 <h1>Редактировать</h1>
 
-<h4>Дожность</h4>
+<h4>Должность</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -31,12 +31,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="BeginDate" class="control-label"></label>
-                <input asp-for="BeginDate" class="form-control" />
+                <input asp-for="BeginDate" class="form-control" type="date"/>
                 <span asp-validation-for="BeginDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" type="date" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">

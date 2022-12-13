@@ -43,8 +43,8 @@ namespace Employment.Controllers
 
         public IActionResult Create()
         {
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Id");
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Id");
+            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name");
+            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name");
 
             return View();
         }
@@ -59,8 +59,8 @@ namespace Employment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Id", street.LocalityId);
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Id", street.StreetTypeId);
+            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
+            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
 
             return View(street);
         }
@@ -76,8 +76,8 @@ namespace Employment.Controllers
             if (street == null)
                 return NotFound();
             
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Id", street.LocalityId);
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Id", street.StreetTypeId);
+            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
+            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
 
             return View(street);
         }
@@ -109,8 +109,8 @@ namespace Employment.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Id", street.LocalityId);
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Id", street.StreetTypeId);
+            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
+            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
 
             return View(street);
         }

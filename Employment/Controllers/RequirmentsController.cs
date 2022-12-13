@@ -6,11 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Employment.Data;
+using Employment.Models;
 
 namespace Employment.Controllers
 {
     public class RequirmentsController : Controller
     {
+        private class Communication { public string Id { get; set; } public string Name { get; set; } }
+
+        private List<Communication> _communicationSkills = new List<Communication>()
+        {
+            new Communication
+            {
+                Id = "Да",
+                Name = "Да"
+            },
+            new Communication
+            {
+                Id = "Нет",
+                Name = "Нет"
+            },
+        };
+
         private readonly EmploymentContext _context;
 
         public RequirmentsController(EmploymentContext context)
@@ -43,8 +60,10 @@ namespace Employment.Controllers
 
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id");
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id");
+            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name");
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name");
+            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
+
             return View();
         }
 
@@ -57,8 +76,10 @@ namespace Employment.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", requirment.GenderId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", requirment.PostId);
+            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", requirment.GenderId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", requirment.PostId);
+            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
+
             return View(requirment);
         }
 
@@ -72,14 +93,15 @@ namespace Employment.Controllers
             if (requirment == null)
                 return NotFound();
 
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", requirment.GenderId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", requirment.PostId);
+            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", requirment.GenderId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", requirment.PostId);
+            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
 
             return View(requirment);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LowerAgeLimit,UpperAgeLimit,CommunicationSkill,PostId,GenderId")] Requirment requirment)
+        public async Task<IActionResult> Edit(int id, Requirment requirment)
         {
             if (id != requirment.Id)
                 return NotFound();
@@ -102,45 +124,14 @@ namespace Employment.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { Id = requirment.PostId });
             }
 
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Id", requirment.GenderId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", requirment.PostId);
+            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", requirment.GenderId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", requirment.PostId);
+            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
 
             return View(requirment);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Requirments == null)
-                return NotFound();
-            
-
-            var requirment = await _context.Requirments
-                .Include(r => r.Gender)
-                .Include(r => r.Post)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (requirment == null)
-                return NotFound();
-
-            return View(requirment);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Requirments == null)
-                return Problem("Передаваемый параметр равен null!");  
-
-            var requirment = await _context.Requirments.FindAsync(id);
-
-            if (requirment != null)
-                _context.Requirments.Remove(requirment);
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool RequirmentExists(int id)

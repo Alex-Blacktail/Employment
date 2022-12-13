@@ -19,16 +19,31 @@
                     Компания: @item.CompanyName
                 </div>
 
-                @foreach (var a in item.FullAddresses)
-                {
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">@a.ToString();</li>
-                    </ul>
-                    <div class="card-body">
-                        <a asp-action="Edit" asp-route-id="@a.Id" class="btn btn-danger">Редактировать</a>
-                        <a asp-action="Delete" asp-controller="CompAddresses" asp-route-id="@a.Id" class="btn btn-primary">Удалить</a>
-                    </div>
-                }
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in item.FullAddresses)
+                            {
+                                <tr>
+                                    <td>
+                                        @a.ToString();
+                                    </td>
+                                    <td>
+                                         <a asp-action="Edit" asp-route-id="@a.Id">Редактировать</a>
+                                         <a asp-action="Delete" asp-controller="CompAddresses" asp-route-id="@a.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     }

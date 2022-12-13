@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Employment.Data;
+using Employment.Models;
 
 namespace Employment.Controllers
 {
@@ -77,36 +78,28 @@ namespace Employment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmploymentBook,SocialPackage,PostId")] SocialResponsibility socialResponsibility)
+        public async Task<IActionResult> Edit(int id, SocialResponsibility socialResponsibility)
         {
             if (id != socialResponsibility.Id)
                 return NotFound();
-            
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(socialResponsibility);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SocialResponsibilityExists(socialResponsibility.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(socialResponsibility);
+                await _context.SaveChangesAsync();
             }
-
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", socialResponsibility.PostId);
-
-            return View(socialResponsibility);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SocialResponsibilityExists(socialResponsibility.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Details", "Posts", new { Id = socialResponsibility.PostId });
         }
 
         public async Task<IActionResult> Delete(int? id)
