@@ -83,7 +83,7 @@ namespace Employment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StreetTypeId,LocalityId")] Street street)
+        public async Task<IActionResult> Edit(int id, Street street)
         {
             if (id != street.Id)
                 return NotFound();
@@ -134,15 +134,20 @@ namespace Employment.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Streets == null)
-                return Problem("Передаваемый параметр равен null!");
-            
-            var street = await _context.Streets.FindAsync(id);
+            try
+            {
+                if (_context.Streets == null)
+                    return Problem("Передаваемый параметр равен null!");
 
-            if (street != null)
-                _context.Streets.Remove(street);
-            
-            await _context.SaveChangesAsync();
+                var street = await _context.Streets.FindAsync(id);
+
+                if (street != null)
+                    _context.Streets.Remove(street);
+
+                await _context.SaveChangesAsync();
+
+            }
+            catch { }
 
             return RedirectToAction(nameof(Index));
         }

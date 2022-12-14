@@ -123,15 +123,20 @@ namespace Employment.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Localities == null)
-                return Problem("Передаваемый параметр равен null!");
-            
-            var locality = await _context.Localities.FindAsync(id);
+            try
+            {
+                if (_context.Localities == null)
+                    return Problem("Передаваемый параметр равен null!");
 
-            if (locality != null)
-                _context.Localities.Remove(locality);
+                var locality = await _context.Localities.FindAsync(id);
+
+                if (locality != null)
+                    _context.Localities.Remove(locality);
+
+                await _context.SaveChangesAsync();
+            }
+            catch{}
             
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

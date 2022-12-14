@@ -21,35 +21,19 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Должность
-            </th>
-            <th>
-                Дата размещения
-            </th>
-            <th>
-                Дата закрытия
-            </th>
-            <th>
-                Компания
-            </th>
+            <th>Должность</th>
+            <th>Дата размещения</th>
+            <th>Дата закрытия</th>
+            <th>Компания</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Posts) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BeginDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company.Name)
-            </td>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.BeginDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
         </tr>
 }
     </tbody>
