@@ -202,5 +202,40 @@ namespace Employment.Controllers
             return _context.Posts.Any(e => e.Id == id);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> OpenPost(int id)
+        {
+            var post = _context.Posts.FirstOrDefault(e => e.Id == id);
+            if(post != null)
+            {
+                if (post.EndDate != null)
+                {
+                    post.BeginDate = DateTime.Today;
+                    post.EndDate = null;
+                    _context.SaveChanges();
+                }
+
+                return RedirectToAction("Details", "Posts", new { Id = post.Id });
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ClosePost(int id)
+        {
+            var post = _context.Posts.FirstOrDefault(e => e.Id == id);
+            if (post != null)
+            {
+                if (post.EndDate == null)
+                {
+                    post.EndDate = DateTime.Today;
+                    _context.SaveChanges();
+                }
+
+                return RedirectToAction("Details", "Posts", new { Id = post.Id });
+            }
+            return NotFound();
+        }
+
     }
 }

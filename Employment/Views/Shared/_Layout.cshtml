@@ -37,6 +37,18 @@
                         <li>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Полезная информация
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Informations" asp-action="DateWithoutEdu">Вакансии по дате без образования</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Informations" asp-action="DateWithPost">Вакансии по заданной должности и дате</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Informations" asp-action="PeriodMaxPosts">Должность с максимальным кол-во вакансий</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     Справочная информация
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

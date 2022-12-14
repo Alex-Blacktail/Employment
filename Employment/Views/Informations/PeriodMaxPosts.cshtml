@@ -1,0 +1,56 @@
+﻿@model Employment.Models.PeriodMaxPostsViewModel
+
+@{
+    ViewData["Title"] = "Запрос";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand">Выберите период для поиска самой популярной вакансии</a>
+            <form class="d-flex" asp-action="PeriodMaxPosts">
+                <input asp-for="BeginDate" class="form-control me-2" type="date" />
+                <input asp-for="EndDate" class="form-control me-2" type="date" />
+                <input type="submit" value="Поиск" class="btn btn-outline-success" />
+            </form>
+        </div>
+    </nav>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Должность
+            </th>
+            <th>
+                Дата размещения
+            </th>
+            <th>
+                Дата закрытия
+            </th>
+            <th>
+                Компания
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Posts) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BeginDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.Name)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+﻿@model Employment.Models.DateWithPostViewModel
+
+@{
+    ViewData["Title"] = "Запрос";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand">Выберите дату для поиска вакансий без образования</a>
+            <form class="d-flex" asp-action="DateWithPost">
+                <input asp-for="Date" class="form-control me-2" type="date" />
+                <input asp-for="Post" class="form-control me-2"/>
+                <input type="submit" value="Поиск" class="btn btn-outline-success" />
+            </form>
+        </div>
+    </nav>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Должность
+            </th>
+            <th>
+                Дата размещения
+            </th>
+            <th>
+                Дата закрытия
+            </th>
+            <th>
+                Компания
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Posts) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BeginDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.Name)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

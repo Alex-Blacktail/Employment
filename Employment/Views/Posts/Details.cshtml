@@ -47,6 +47,15 @@
         </dt>
         <dd class = "col-sm-10">
             <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a>
+
+            @if(Model.Post.EndDate == null)
+            {
+                <a asp-action="ClosePost" asp-route-id="@Model.Post.Id">Закрыть вакансию</a>
+            }
+            else
+            {
+                <a asp-action="OpenPost" asp-route-id="@Model.Post.Id">Открыть вакансию</a>
+            }           
         </dd>
     </dl>
 
