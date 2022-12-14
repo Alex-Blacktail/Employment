@@ -41,35 +41,31 @@ namespace Employment.Controllers
 
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,PhoneNumber1,CompanyId")] PhoneNumber phoneNumber)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(phoneNumber);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
 
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", phoneNumber.CompanyId);
-            return View(phoneNumber);
+            _context.Add(phoneNumber);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.PhoneNumbers == null)
                 return NotFound();
-            
+
             var phoneNumber = await _context.PhoneNumbers.FindAsync(id);
 
             if (phoneNumber == null)
                 return NotFound();
-            
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", phoneNumber.CompanyId);
+
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", phoneNumber.CompanyId);
             return View(phoneNumber);
         }
 
@@ -79,43 +75,38 @@ namespace Employment.Controllers
             if (id != phoneNumber.Id)
                 return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(phoneNumber);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PhoneNumberExists(phoneNumber.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(phoneNumber);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PhoneNumberExists(phoneNumber.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
 
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", phoneNumber.CompanyId);
-            return View(phoneNumber);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.PhoneNumbers == null)
                 return NotFound();
-            
+
             var phoneNumber = await _context.PhoneNumbers
                 .Include(p => p.Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (phoneNumber == null)
                 return NotFound();
-            
+
             return View(phoneNumber);
         }
 
@@ -129,14 +120,14 @@ namespace Employment.Controllers
 
             if (phoneNumber != null)
                 _context.PhoneNumbers.Remove(phoneNumber);
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PhoneNumberExists(int id)
         {
-          return _context.PhoneNumbers.Any(e => e.Id == id);
+            return _context.PhoneNumbers.Any(e => e.Id == id);
         }
     }
 }

@@ -25,6 +25,7 @@
             <th>Дата размещения</th>
             <th>Дата закрытия</th>
             <th>Компания</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,6 +35,9 @@
             <td>@Html.DisplayFor(modelItem => item.BeginDate)</td>
             <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
             <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
+            <td>
+                    <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Id">Подробно</a>
+            </td>
         </tr>
 }
     </tbody>

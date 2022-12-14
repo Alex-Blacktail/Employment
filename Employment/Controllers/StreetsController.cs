@@ -28,7 +28,7 @@ namespace Employment.Controllers
         {
             if (id == null || _context.Streets == null)
                 return NotFound();
-            
+
 
             var street = await _context.Streets
                 .Include(s => s.Locality)
@@ -52,17 +52,12 @@ namespace Employment.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,Name,StreetTypeId,LocalityId")] Street street)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(street);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
 
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
+            _context.Add(street);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
 
-            return View(street);
+
         }
 
         // GET: Streets/Edit/5
@@ -70,12 +65,12 @@ namespace Employment.Controllers
         {
             if (id == null || _context.Streets == null)
                 return NotFound();
-            
+
             var street = await _context.Streets.FindAsync(id);
 
             if (street == null)
                 return NotFound();
-            
+
             ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
             ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
 
@@ -87,32 +82,25 @@ namespace Employment.Controllers
         {
             if (id != street.Id)
                 return NotFound();
-            
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(street);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StreetExists(street.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(street);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StreetExists(street.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
 
-            ViewData["LocalityId"] = new SelectList(_context.Localities, "Id", "Name", street.LocalityId);
-            ViewData["StreetTypeId"] = new SelectList(_context.StreetTypes, "Id", "Name", street.StreetTypeId);
-
-            return View(street);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -127,7 +115,7 @@ namespace Employment.Controllers
 
             if (street == null)
                 return NotFound();
-            
+
             return View(street);
         }
 

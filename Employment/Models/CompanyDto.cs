@@ -15,10 +15,21 @@ namespace Employment.Models
 
             var phones = Company.PhoneNumbers.ToArray();
 
-            for(int i = 0; i < phones.Length - 1; i++)
-                sb.Append(phones[i].PhoneNumber1).Append(", ");
+            if(phones.Length > 1)
+            {
+                for (int i = 0; i < phones.Length - 1; i++)
+                    sb.Append(phones[i].PhoneNumber1).Append(", ");
 
-            sb.Append(phones[phones.Length - 1].PhoneNumber1);
+                sb.Append(phones[phones.Length - 1].PhoneNumber1);
+            }
+            else if(phones.Length > 0)
+            {
+                sb.Append(phones[0].PhoneNumber1);
+            }
+            else
+            {
+                sb.Append("-");
+            }
             return sb.ToString();
         }
     }

@@ -70,17 +70,9 @@ namespace Employment.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,LowerAgeLimit,UpperAgeLimit,CommunicationSkill,PostId,GenderId")] Requirment requirment)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(requirment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", requirment.GenderId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", requirment.PostId);
-            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
-
-            return View(requirment);
+            _context.Add(requirment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -106,32 +98,23 @@ namespace Employment.Controllers
             if (id != requirment.Id)
                 return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(requirment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RequirmentExists(requirment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Details", "Posts", new { Id = requirment.PostId });
+                _context.Update(requirment);
+                await _context.SaveChangesAsync();
             }
-
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", requirment.GenderId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Name", requirment.PostId);
-            ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
-
-            return View(requirment);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RequirmentExists(requirment.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Details", "Posts", new { Id = requirment.PostId });
         }
 
         private bool RequirmentExists(int id)

@@ -48,12 +48,11 @@ namespace Employment.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,Name,LocalityTypeId")] Locality locality)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(locality);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+
+            _context.Add(locality);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
 
             ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
             return View(locality);
@@ -67,7 +66,7 @@ namespace Employment.Controllers
             var locality = await _context.Localities.FindAsync(id);
             if (locality == null)
                 return NotFound();
-            
+
 
             ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
             return View(locality);
@@ -78,31 +77,27 @@ namespace Employment.Controllers
         {
             if (id != locality.Id)
                 return NotFound();
-            
 
-            if (ModelState.IsValid)
+
+
+            try
             {
-                try
-                {
-                    _context.Update(locality);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LocalityExists(locality.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(locality);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LocalityExists(locality.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
 
-            ViewData["LocalityTypeId"] = new SelectList(_context.LocalityTypes, "Id", "Name", locality.LocalityTypeId);
-            return View(locality);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -116,7 +111,7 @@ namespace Employment.Controllers
 
             if (locality == null)
                 return NotFound();
-            
+
             return View(locality);
         }
 
@@ -135,14 +130,14 @@ namespace Employment.Controllers
 
                 await _context.SaveChangesAsync();
             }
-            catch{}
-            
+            catch { }
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool LocalityExists(int id)
         {
-          return _context.Localities.Any(e => e.Id == id);
+            return _context.Localities.Any(e => e.Id == id);
         }
     }
 }

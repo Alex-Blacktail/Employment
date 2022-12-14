@@ -32,6 +32,7 @@
             <th>
                 Компания
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -48,6 +49,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Company.Name)
+            </td>
+            <td>
+                    <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Id">Подробно</a>
             </td>
         </tr>
 }

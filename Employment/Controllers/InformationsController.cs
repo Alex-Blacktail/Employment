@@ -37,20 +37,32 @@ namespace Employment.Controllers
 
         public IActionResult DateWithoutEdu()
         {
-            var date = DateTime.Today;
+            var date = DateTime.Today.AddDays(-7);
 
             var posts = _context.Posts
                 .Include(e => e.Company)
-                .Where(e => e.BeginDate <= date)
-                .Where(e => e.Name.ToLower().Contains("образован") != true)
+                .Include(e => e.Skills)
+                .Where(e => e.BeginDate >= date)
                 .OrderBy(e => e.CompanyId)
                 .ThenBy(e => e.BeginDate)
                 .ToList();
 
+            var list = new List<Post>();
+
+            foreach (var post in posts)
+            {
+                var buff = post.Skills
+                    .Where(e => e.Name.ToLower().Contains("образован"))
+                    .ToList();
+
+                if (buff.Count < 1)
+                    list.Add(post);
+            }
+
             var model = new DateWithoutEduViewModel
             {
                 Date = date,
-                Posts = posts
+                Posts = list
             };
 
             return View(model);
@@ -61,13 +73,25 @@ namespace Employment.Controllers
         {
             var posts = _context.Posts
                 .Include(e => e.Company)
-                .Where(e => e.BeginDate <= model.Date)
-                .Where(e => e.Name.ToLower().Contains("образован") == false)
+                .Include(e => e.Skills)
+                .Where(e => e.BeginDate >= model.Date)
                 .OrderBy(e => e.CompanyId)
                 .ThenBy(e => e.BeginDate)
                 .ToList();
 
-            model.Posts = posts;
+            var list = new List<Post>();
+
+            foreach (var post in posts)
+            {
+                var buff = post.Skills
+                    .Where(e => e.Name.ToLower().Contains("образован"))
+                    .ToList();
+
+                if (buff.Count < 1)
+                    list.Add(post);
+            }
+
+            model.Posts = list;
 
             return View(model);
         }
@@ -78,7 +102,7 @@ namespace Employment.Controllers
 
             var posts = _context.Posts
                 .Include(e => e.Company)
-                .Where(e => e.BeginDate <= date)
+                .Where(e => e.BeginDate >= date)
                 .OrderBy(e => e.CompanyId)
                 .ThenBy(e => e.BeginDate);
 
@@ -92,14 +116,14 @@ namespace Employment.Controllers
         [HttpPost]
         public async Task<IActionResult> DateWithPost(DateWithPostViewModel model)
         {
-
             List<Post> posts = null;
+
             if (string.IsNullOrWhiteSpace(model.Post))
             {
                 posts = _context.Posts
                     .Include(e => e.Company)
                     .Include(e => e.Requirments)
-                    .Where(e => e.BeginDate <= model.Date)
+                    .Where(e => e.BeginDate >= model.Date)
                     .OrderBy(e => e.CompanyId)
                     .ThenBy(e => e.BeginDate)
                     .ToList();
@@ -111,7 +135,7 @@ namespace Employment.Controllers
                 posts = _context.Posts
                     .Include(e => e.Company)
                     .Include(e => e.Requirments)
-                    .Where(e => e.BeginDate <= model.Date)
+                    .Where(e => e.BeginDate >= model.Date)
                     .Where(e => (e.Name.ToLower().Trim()).Contains(postName))
                     .OrderBy(e => e.CompanyId)
                     .ThenBy(e => e.BeginDate)

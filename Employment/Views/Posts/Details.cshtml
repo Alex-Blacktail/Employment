@@ -36,17 +36,12 @@
             @Html.DisplayFor(model => model.Post.EndDate)
         </dd>
 
-        <dt class = "col-sm-2">
-            Компания
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.Company.Name)
-        </dd>
+        <dt class = "col-sm-2">Компания</dt>
 
-        <dt class = "col-sm-2">
-        </dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Post.Company.Name)</dd>
+        <dt class = "col-sm-2"></dt>
         <dd class = "col-sm-10">
-            <a asp-action="Edit" asp-route-id="@Model.Post.Id">Редактировать</a>
+            <a asp-action="Edit" asp-route-id="@Model.Post.Id" style="margin-right:6px">Редактировать</a>
 
             @if(Model.Post.EndDate == null)
             {
@@ -55,7 +50,7 @@
             else
             {
                 <a asp-action="OpenPost" asp-route-id="@Model.Post.Id">Открыть вакансию</a>
-            }           
+            }
         </dd>
     </dl>
 
