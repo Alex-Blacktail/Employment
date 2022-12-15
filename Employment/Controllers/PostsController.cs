@@ -28,6 +28,20 @@ namespace Employment.Controllers
             },
         };
 
+        private List<Communication> _socPacket = new List<Communication>()
+        {
+            new Communication
+            {
+                Id = "Требуется",
+                Name = "Требуется"
+            },
+            new Communication
+            {
+                Id = "Не требуется",
+                Name = "Не требуется"
+            },
+        };
+
         private readonly EmploymentContext _context;
 
         public PostsController(EmploymentContext context)
@@ -77,6 +91,8 @@ namespace Employment.Controllers
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
             ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name");
             ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
+            ViewData["SocialPackage"] = new SelectList(_socPacket, "Id", "Name");
+            ViewData["EmploymentBook"] = new SelectList(_communicationSkills, "Id", "Name");
 
             return View();
         }

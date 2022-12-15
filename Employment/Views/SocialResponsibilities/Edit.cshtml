@@ -18,13 +18,11 @@
 
             <div class="form-group">
                 <label asp-for="EmploymentBook" class="control-label"></label>
-                <input asp-for="EmploymentBook" class="form-control" />
-                <span asp-validation-for="EmploymentBook" class="text-danger"></span>
+                <select asp-for="EmploymentBook" class="form-control" asp-items="ViewBag.EmploymentBook"></select>
             </div>
             <div class="form-group">
                 <label asp-for="SocialPackage" class="control-label"></label>
-                <input asp-for="SocialPackage" class="form-control" />
-                <span asp-validation-for="SocialPackage" class="text-danger"></span>
+                <select asp-for="SocialPackage" class="form-control" asp-items="ViewBag.SocialPackage"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" style="margin-top:5px" />

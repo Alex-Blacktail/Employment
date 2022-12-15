@@ -34,9 +34,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CompAddresses" asp-action="Index">Адресная книга</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PhoneNumbers" asp-action="Index">Номера телефонов</a>
-                        </li>
                         <li>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,6 +54,9 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Localities" asp-action="Index">Населенные пункты</a></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Streets" asp-action="Index">Улицы</a></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="PhoneNumbers" asp-action="Index">Номера телефонов</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

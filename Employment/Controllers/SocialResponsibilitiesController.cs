@@ -13,7 +13,35 @@ namespace Employment.Controllers
     public class SocialResponsibilitiesController : Controller
     {
         private readonly EmploymentContext _context;
+        private class Communication { public string Id { get; set; } public string Name { get; set; } }
 
+        private List<Communication> _communicationSkills = new List<Communication>()
+        {
+            new Communication
+            {
+                Id = "Да",
+                Name = "Да"
+            },
+            new Communication
+            {
+                Id = "Нет",
+                Name = "Нет"
+            },
+        };
+
+        private List<Communication> _socPacket = new List<Communication>()
+        {
+            new Communication
+            {
+                Id = "Требуется",
+                Name = "Требуется"
+            },
+            new Communication
+            {
+                Id = "Не требуется",
+                Name = "Не требуется"
+            },
+        };
         public SocialResponsibilitiesController(EmploymentContext context)
         {
             _context = context;
@@ -58,6 +86,8 @@ namespace Employment.Controllers
             }
 
             ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", socialResponsibility.PostId);
+            ViewData["SocialPackage"] = new SelectList(_socPacket, "Id", "Name");
+            ViewData["EmploymentBook"] = new SelectList(_communicationSkills, "Id", "Name");
 
             return View(socialResponsibility);
         }
@@ -73,6 +103,8 @@ namespace Employment.Controllers
                 return NotFound();
 
             ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Id", socialResponsibility.PostId);
+            ViewData["SocialPackage"] = new SelectList(_socPacket, "Id", "Name");
+            ViewData["EmploymentBook"] = new SelectList(_communicationSkills, "Id", "Name");
 
             return View(socialResponsibility);
         }
