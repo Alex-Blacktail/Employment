@@ -28,7 +28,7 @@ namespace Employment.Controllers
             },
         };
 
-        private List<Communication> _socPacket = new List<Communication>()
+        private List<Communication> _treb = new List<Communication>()
         {
             new Communication
             {
@@ -91,8 +91,8 @@ namespace Employment.Controllers
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
             ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name");
             ViewData["CommunicationSkill"] = new SelectList(_communicationSkills, "Id", "Name");
-            ViewData["SocialPackage"] = new SelectList(_socPacket, "Id", "Name");
-            ViewData["EmploymentBook"] = new SelectList(_communicationSkills, "Id", "Name");
+            ViewData["SocialPackage"] = new SelectList(_communicationSkills, "Id", "Name");
+            ViewData["EmploymentBook"] = new SelectList(_treb, "Id", "Name");
 
             return View();
         }
