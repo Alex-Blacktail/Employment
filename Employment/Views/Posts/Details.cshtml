@@ -26,14 +26,14 @@
             @Html.DisplayNameFor(model => model.Post.BeginDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.BeginDate)
+            @(Model.Post.BeginDate.ToShortDateString())
         </dd>
 
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Post.EndDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Post.EndDate)
+            @(Model.Post.EndDate == null ? "-" : Convert.ToDateTime(Model.Post.EndDate).ToShortDateString())
         </dd>
 
         <dt class = "col-sm-2">Компания</dt>

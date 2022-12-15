@@ -35,10 +35,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BeginDate)
+                @item.BeginDate.ToShortDateString()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @(item.EndDate == null ? "-" : Convert.ToDateTime(item.EndDate).ToShortDateString())
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Company.Name)
